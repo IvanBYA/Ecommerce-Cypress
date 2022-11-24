@@ -1,0 +1,5 @@
+// Instalar NodeModules por primera vez
+npm install
+
+// Correr Cypress
+npm run cypress:open
