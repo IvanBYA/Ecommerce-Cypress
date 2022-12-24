@@ -110,4 +110,6 @@ describe('Plan de Pruebas Tienda en Linea - (Automation Exercise)', () => {
     cy.get('.login-form > form > .btn').click();
     cy.get('.login-form > form > p').should('include.text','Your email or password is incorrect!');
   });
+
+  
 })
