@@ -17,9 +17,6 @@
   ],
   "author": "Ivan",
   "license": "ISC",
-  "dependencies": {
-    "cypress": "^12.2.0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IvanBYA/TiendaDeRopa-Cypress.git"
@@ -27,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/IvanBYA/TiendaDeRopa-Cypress/issues"
   },
-  "homepage": "https://github.com/IvanBYA/TiendaDeRopa-Cypress#readme"
+  "homepage": "https://github.com/IvanBYA/TiendaDeRopa-Cypress#readme",
+  "devDependencies": {
+    "cypress": "^12.2.0"
+  }
 }
