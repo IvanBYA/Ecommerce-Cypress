@@ -1,17 +1,26 @@
 describe('Plan de Pruebas Tienda en Linea - (Automation Exercise)', () => {
+
+  // Aquí definimos el usuario que utilizaremos en algunas pruebas
   const usuarioTest = {
     nombre: "Juan Antonio prueba",
     correo: "prueba@prueba12.com",
     contra: "contraseñaprueba"
   }
 
+  const usuarioSinEliminar = {
+    nombre: "Prueba de Usuario",
+    correo: "prueba@pruebaprueba.com",
+    contra: "contraseñaprueba"
+  }
+
+  
+
   beforeEach('APIS', () => {
-    cy.log('Esperando APIS');
-    cy.intercept('GET', 'https://pagead2.googlesyndication.com/getconfig/sodar?sv=200&tid=gda&tv=r20221207&st=env').as('vistaLogin');
+    cy.visit('/');
   })
 
   it('Caso de Prueba - Registro de usuario y eliminar cuenta', () => {
-    cy.visit('/');
+    cy.intercept('GET', 'https://pagead2.googlesyndication.com/getconfig/sodar?sv=200&tid=gda&tv=r20221207&st=env').as('vistaLogin');
     cy.wait('@vistaLogin');
     cy.get('.shop-menu > .nav > :nth-child(4) > a').click();
     cy.wait('@vistaLogin');
@@ -50,10 +59,9 @@ describe('Plan de Pruebas Tienda en Linea - (Automation Exercise)', () => {
       should('have.text', 'Account Deleted!');
     cy.get('.pull-right > .btn').
       click();
-  })
+  });
 
   it('Inicio de sesión con email y contraseña correcto', () => {
-    cy.visit('/');
     cy.get('.shop-menu > .nav > :nth-child(4) > a').click();
     cy.url().should('include', '/login');
     cy.get('.signup-form > h2').contains('New User Signup');
@@ -99,10 +107,9 @@ describe('Plan de Pruebas Tienda en Linea - (Automation Exercise)', () => {
     cy.get('.shop-menu > .nav > :nth-child(5) > a').click();
     cy.get('b').should('have.text', 'Account Deleted!');
     cy.get('.pull-right > .btn').click();
-  })
+  });
 
   it('Inicio de sesión con email y contraseña incorrecto', () => {
-    cy.visit('/');
     cy.get('.shop-menu > .nav > :nth-child(4) > a').click();
     cy.get('.login-form > h2').should('include.text','Login to your account');
     cy.get('.login-form > form > [type="email"]').type('a@pruebaa.com');
@@ -111,5 +118,19 @@ describe('Plan de Pruebas Tienda en Linea - (Automation Exercise)', () => {
     cy.get('.login-form > form > p').should('include.text','Your email or password is incorrect!');
   });
 
-  
-})
+  it.only('Cerrar sesión de un usuario', () => {
+    cy.intercept('GET', 'https://pagead2.googlesyndication.com/getconfig/sodar?sv=200&tid=gda&tv=r20221207&st=env').as('vistaLogin');
+    cy.get('#slider-carousel > .carousel-inner').
+      should('be.visible'); // True - Si está visible
+    // Encuentra un elemento <a> con el atributo "href=/login"
+    cy.get('a[href="/login"]').click();
+    cy.get('.login-form h2').should('have.text','Login to your account');
+    cy.get('.login-form > form > [type="email"]').type(usuarioSinEliminar.correo);
+    cy.get('[type="password"]').type(usuarioSinEliminar.contra);
+    cy.get('.login-form > form > .btn').click();
+    cy.get(':nth-child(10) > a').should('include.text', 'Logged in as ' + String(usuarioSinEliminar.nombre));
+    cy.get('.shop-menu > .nav > :nth-child(4) > a').click();
+    cy.url().should('include', '/login')
+    cy.get('.login-form > h2').should('have.text','Login to your account');
+  });
+});
